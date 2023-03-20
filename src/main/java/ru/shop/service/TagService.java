@@ -2,7 +2,6 @@ package ru.shop.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.shop.entity.Tag;
 import ru.shop.exception.TagNotFoundException;
 import ru.shop.repository.TagRepository;
@@ -10,7 +9,6 @@ import ru.shop.repository.TagRepository;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

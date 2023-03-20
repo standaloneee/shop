@@ -3,16 +3,12 @@ package ru.shop.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import ru.shop.entity.Product;
 import ru.shop.entity.Tag;
 import ru.shop.exception.ProductAlreadyExistsException;
 import ru.shop.exception.ProductNotFoundException;
-import ru.shop.exception.ProductWithSuchNameNotFoundException;
 import ru.shop.repository.ProductRepository;
 
-import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 

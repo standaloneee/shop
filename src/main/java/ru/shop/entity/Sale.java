@@ -7,16 +7,10 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Future;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity

@@ -1,8 +1,6 @@
 package ru.shop.controller;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,8 +17,6 @@ import ru.shop.entity.Tag;
 import ru.shop.service.SaleService;
 import ru.shop.utils.UUIDValid;
 
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -54,7 +50,7 @@ public class SaleController {
                                                                @RequestParam int expiration_time
                                                                ) {
         System.out.println("something");
-        System.out.println(start_date.toString());
+        System.out.println(start_date);
         return new ResponseEntity<>(saleService.editProductSalesByTags(tags, discount, start_date, expiration_time), HttpStatus.OK);
     }
 
