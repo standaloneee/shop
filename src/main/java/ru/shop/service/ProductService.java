@@ -3,9 +3,11 @@ package ru.shop.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.shop.entity.Product;
 import ru.shop.entity.Tag;
+import ru.shop.exception.ProductAlreadyExistsException;
 import ru.shop.exception.ProductNotFoundException;
 import ru.shop.exception.ProductWithSuchNameNotFoundException;
 import ru.shop.repository.ProductRepository;
@@ -21,12 +23,15 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final TagService tagService;
 
-    @Transactional
+//    @Transactional(propagation = Propagation.REQUIRED)
     public Product postProduct(Product product) {
         // пока без валидаций и т.п.
         if (productRepository.findProductByName(
                 product.getName()).isEmpty()) {
             product.setId(UUID.randomUUID());
+        }
+        else{
+            throw new ProductAlreadyExistsException(product.getName());
         }
 
         if (product.getTag().isEmpty()) {
@@ -36,6 +41,7 @@ public class ProductService {
         }
 
         return productRepository.save(product);
+//        return null;
     }
 
     public Product editProduct(UUID productId, Product product) {

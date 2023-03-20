@@ -26,7 +26,7 @@ public class ProductController {
 
     @GetMapping("/{productId}")
     @PreAuthorize("@authService.authInfo.hasRole('USER')")
-    public ResponseEntity<Product> postProduct(@PathVariable @UUIDValid String productId){
+    public ResponseEntity<Product> getProduct(@PathVariable @UUIDValid String productId){
         return new ResponseEntity<>(productService.getProduct(UUID.fromString(productId)), HttpStatus.OK);
     }
     @PostMapping("")

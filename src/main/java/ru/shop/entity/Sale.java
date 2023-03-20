@@ -3,6 +3,7 @@ package ru.shop.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Future;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
@@ -22,6 +24,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @Table(name = "sale")
+@ToString
 public class Sale {
     @Id
     private UUID id;
@@ -35,6 +38,7 @@ public class Sale {
     private short discount;
 
     @Column(name = "start_date")
+    @Future
     private LocalDate start_date;
 
     @Column(name = "expiration_time")

@@ -9,7 +9,15 @@ import ru.shop.entity.Tag;
 import ru.shop.exception.ProductNotFoundException;
 import ru.shop.mapper.SaleMapper;
 import ru.shop.repository.SaleRepository;
+import ru.shop.utils.ByteSequenceGenerator;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -33,12 +41,35 @@ public class SaleService {
                 .orElseThrow(() -> new ProductNotFoundException(saleId.toString()));
         return saleRepository.save(sale);
     }
-    public Set<Product> editProductSalesByTags(Set<Tag> tagSet, short discount){
+    public Set<Product> editProductSalesByTags(Tag[] tagSet,
+                                               short discount,
+                                               String start_date,
+                                               int expiration_time
+    ){
      Set<Product> products = new HashSet<>();
         for (var item:tagSet) {
+            System.out.println(item.getId() + " " + item.getName());
             products.addAll(productService.getAllProductsByTag(item));
+            System.out.println(productService.getAllProductsByTag(item) + "fdlkfhewdkfu");
         }
-        products.forEach(item -> item.getSale().setDiscount(discount));
+        for (var item:products) {
+            if(item.getSale() == null){
+                item.setSale(new Sale());
+                LocalDate localDate = LocalDate.parse(start_date);
+                item.getSale().setDiscount(discount);
+                item.getSale().setStart_date(localDate);
+                item.getSale().setExpiration_time(expiration_time);
+                item.getSale().setId(UUID.nameUUIDFromBytes(
+                        ByteSequenceGenerator.StringToByteArray(
+                                String.valueOf(discount),
+                                start_date,
+                                String.valueOf(expiration_time)
+                        )
+                ));
+                saleRepository.save(item.getSale());
+            }
+        }
+//        products.forEach(item -> item.getSale().setDiscount(discount));
         return products;
     }
 }

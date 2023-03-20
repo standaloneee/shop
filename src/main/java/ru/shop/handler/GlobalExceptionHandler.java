@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.shop.exception.ProductAlreadyExistsException;
 import ru.shop.exception.ProductNotFoundException;
 import ru.shop.exception.TagNotFoundException;
 
@@ -25,7 +26,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(
             value = {
                     ProductNotFoundException.class,
-                    TagNotFoundException.class
+                    TagNotFoundException.class,
+                    ProductAlreadyExistsException.class
             })
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public String handleRoomIsAlreadyDeletedException(RuntimeException e) {
