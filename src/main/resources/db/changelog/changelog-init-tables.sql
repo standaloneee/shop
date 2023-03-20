@@ -4,6 +4,12 @@ create table role
     role_name VARCHAR(15) NOT NULL
 );
 
+create table tag
+(
+    id        UUID PRIMARY KEY ,
+    name VARCHAR NOT NULL
+);
+
 create table notification
 (
     id        UUID PRIMARY KEY,
@@ -105,14 +111,22 @@ CREATE TABLE product_users
     foreign key (user_id) references customer (id),
     foreign key (product_id) references product(id)
 );
+
 CREATE TABLE product_sales
 (
-    id UUID PRIMARY KEY,
     sale_id UUID NOT NULL,
     product_id UUID NOT NULL,
     foreign key (sale_id) references sale (id),
     foreign key (product_id) references product(id)
 );
+CREATE TABLE product_tags
+(
+    tag_id UUID NOT NULL,
+    product_id UUID NOT NULL,
+    foreign key (tag_id) references tag (id),
+    foreign key (product_id) references product(id)
+);
+
 
 
 

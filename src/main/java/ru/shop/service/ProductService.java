@@ -3,9 +3,14 @@ package ru.shop.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.shop.entity.Product;
+import ru.shop.entity.Tag;
+import ru.shop.exception.ProductNotFoundException;
+import ru.shop.exception.ProductWithSuchNameNotFoundException;
 import ru.shop.repository.ProductRepository;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -13,10 +18,37 @@ import java.util.UUID;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final TagService tagService;
 
-    public Product postProduct(Product product){
+    @Transactional
+    public Product postProduct(Product product) {
         // пока без валидаций и т.п.
-        product.setId(UUID.randomUUID());
+        if (!productRepository.findProductByName(
+                product.getName()).isPresent()) {
+            product.setId(UUID.randomUUID());
+        }
+
+        if (product.getTag().isEmpty()) {
+            productRepository.save(product);
+        } else {
+            tagService.addTags(product.getTag());
+        }
         return productRepository.save(product);
+    }
+
+    public Product editProduct(UUID productId, Product product) {
+        // пока без валидаций и т.п.
+        productRepository
+                .findProductById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId.toString()));
+        return productRepository.save(product);
+    }
+
+    public Set<Product> getAllProductsByTag(Tag tag) {
+        return productRepository.findProductsByTag(tag);
+    }
+
+    public Product getProduct(UUID productId) {
+        return productRepository.findProductById(productId).orElseThrow(() -> new ProductNotFoundException(productId.toString()));
     }
 }

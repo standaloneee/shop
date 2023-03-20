@@ -44,9 +44,6 @@ public class AuthController {
 
     @PostMapping("register")
     public ResponseEntity<JwtResponse> register(@RequestBody CustomerDto customerDto) throws AuthException {
-        if (customerService.getByLogin(customerDto.getUserName()).isPresent()) {
-            throw new AuthException("User " + customerDto.getUserName() + "already exists");
-        }
         customerService.register(customerDto);
         return ResponseEntity.ok(authService.login(new JwtRequest(customerDto.getUserName(), customerDto.getPassword())));
     }

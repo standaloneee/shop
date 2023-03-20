@@ -26,11 +26,11 @@ public class Sale {
     @Id
     private UUID id;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "product_sales",
-            joinColumns = @JoinColumn(name = "sale_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private Set<Product> products;
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(name = "product_sales",
+//            joinColumns = @JoinColumn(name = "sale_id"),
+//            inverseJoinColumns = @JoinColumn(name = "product_id"))
+//    private Set<Product> products;
 
     private short discount;
 

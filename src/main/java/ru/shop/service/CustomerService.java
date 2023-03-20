@@ -8,6 +8,7 @@ import ru.shop.entity.Customer;
 import ru.shop.mapper.UserMapper;
 import ru.shop.repository.CustomerRepository;
 
+import javax.security.auth.message.AuthException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,7 +23,13 @@ public class CustomerService {
         return customerRepository.findCustomerByUserName(login);
     }
 
-    public void register(CustomerDto customerDto) {
+    public void register(CustomerDto customerDto) throws AuthException {
+        if(getByLogin(customerDto.getUserName()).isPresent()){
+            throw new AuthException("User " + customerDto.getUserName() + " already exists");
+        }
+        if(customerDto.getRole().equals("ADMIN")){
+            throw new AuthException("User cannot be set as ADMIN when registering");
+        }
         Customer customer = UserMapper.INSTANCE.register(customerDto, roleService);
         customerRepository.save(customer);
     }

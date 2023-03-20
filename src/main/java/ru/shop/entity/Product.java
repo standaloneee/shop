@@ -43,12 +43,22 @@ public class Product {
     )
     private Set<Feedback> feedback;
 
-    private String tags;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "product_tags",
+            joinColumns = @JoinColumn(name = "tag_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private Set<Tag> tag;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parameter_id")
     private ParametersEntity properties;
 
     private byte grade;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinTable(name = "product_sales",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "sale_id"))
+    private Sale sale;
 
 }
