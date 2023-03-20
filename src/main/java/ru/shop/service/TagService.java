@@ -6,8 +6,10 @@ import ru.shop.entity.Tag;
 import ru.shop.exception.TagNotFoundException;
 import ru.shop.repository.TagRepository;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,9 +21,12 @@ public class TagService {
         return tagRepository.findTagByName(name).orElseThrow(() -> new TagNotFoundException(name));
     }
 
-    public void addTags(Set<Tag> tags){
+    public Set<Tag> addTags(Set<Tag> tags){
         tags.forEach(item -> item.setId(UUID.nameUUIDFromBytes(item.getName().getBytes())));
-        tagRepository.saveAll(tags);
+        for (var item: tags) {
+            System.out.println(item.getId() + " \n" + item.getName());
+        }
+        return new HashSet<>(tagRepository.saveAll(tags));
     }
 
 }

@@ -10,6 +10,7 @@ import ru.shop.exception.ProductNotFoundException;
 import ru.shop.exception.ProductWithSuchNameNotFoundException;
 import ru.shop.repository.ProductRepository;
 
+import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,16 +24,17 @@ public class ProductService {
     @Transactional
     public Product postProduct(Product product) {
         // пока без валидаций и т.п.
-        if (!productRepository.findProductByName(
-                product.getName()).isPresent()) {
+        if (productRepository.findProductByName(
+                product.getName()).isEmpty()) {
             product.setId(UUID.randomUUID());
         }
 
         if (product.getTag().isEmpty()) {
             productRepository.save(product);
         } else {
-            tagService.addTags(product.getTag());
+            product.setTag(tagService.addTags(product.getTag()));
         }
+
         return productRepository.save(product);
     }
 
