@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -31,5 +32,11 @@ public class Product {
     private String sale_description;
 
     private Feedback feedback;
+
+    private String tags;
+
+    private ParametersEntity properties;
+
+    private byte grade;
 
 }
