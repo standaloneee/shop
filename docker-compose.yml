@@ -1,0 +1,38 @@
+services:
+  db-shop:
+    image: postgres:14.6
+    container_name: db-shop
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=db-picker
+    ports:
+      - 5432:5432
+    command: postgres -p 5432
+    volumes:
+      - ./db-shop:/var/lib/postgresql/data
+# Only for server hosting
+#    networks:
+#      - dev_network
+
+  shop:
+    build:
+      dockerfile: Dockerfile
+    container_name: shop
+    environment:
+      - DATABASE_HOST=db-shop
+      - DATABASE_PORT=5432
+    ports:
+      - 8080:8080
+    depends_on:
+      - shop
+#    networks:
+#      - dev_network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
+#networks:
+#  dev_network:
+#    external: true
+#    name: dev_network
