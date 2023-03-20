@@ -55,4 +55,8 @@ public class ProductService {
     public Product getProduct(UUID productId) {
         return productRepository.findProductById(productId).orElseThrow(() -> new ProductNotFoundException(productId.toString()));
     }
+
+    public void saveProducts(Set<Product> products){
+        productRepository.saveAll(products);
+    }
 }

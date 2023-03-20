@@ -25,7 +25,6 @@ public class SaleService {
 
     public Sale postSale(Sale sale){
         // пока без валидаций и т.п.
-
         return SaleMapper.INSTANCE.map(sale);
     }
     public Sale editSale(UUID saleId, Sale sale){
@@ -42,9 +41,7 @@ public class SaleService {
     ){
      Set<Product> products = new HashSet<>();
         for (var item:tagSet) {
-            System.out.println(item.getId() + " " + item.getName());
             products.addAll(productService.getAllProductsByTag(item));
-            System.out.println(productService.getAllProductsByTag(item) + "fdlkfhewdkfu");
         }
         for (var item:products) {
             if(item.getSale() == null){
@@ -63,7 +60,7 @@ public class SaleService {
                 saleRepository.save(item.getSale());
             }
         }
-//        products.forEach(item -> item.getSale().setDiscount(discount));
+        productService.saveProducts(products);
         return products;
     }
 }

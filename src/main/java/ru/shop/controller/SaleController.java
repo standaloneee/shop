@@ -49,8 +49,6 @@ public class SaleController {
                                                                @RequestParam String start_date,
                                                                @RequestParam int expiration_time
                                                                ) {
-        System.out.println("something");
-        System.out.println(start_date);
         return new ResponseEntity<>(saleService.editProductSalesByTags(tags, discount, start_date, expiration_time), HttpStatus.OK);
     }
 
