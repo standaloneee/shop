@@ -4,6 +4,14 @@ create table role
     role_name VARCHAR(15) NOT NULL
 );
 
+create table notification
+(
+    id        UUID PRIMARY KEY,
+    subject varchar NOT NULL,
+    start_date DATE NOT NULL,
+    description varchar NOT NULL
+);
+
 CREATE TABLE parameters
 (
     id          UUID PRIMARY KEY,
