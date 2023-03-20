@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -31,7 +32,7 @@ public class Product {
 
     private String sale_description;
 
-    private Feedback feedback;
+    private Set<Feedback> feedback;
 
     private String tags;
 
