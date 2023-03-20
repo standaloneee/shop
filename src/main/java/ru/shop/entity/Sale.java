@@ -4,9 +4,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
@@ -20,11 +26,17 @@ public class Sale {
     @Id
     private UUID id;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "product_sales",
+            joinColumns = @JoinColumn(name = "sale_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
     private Set<Product> products;
 
     private short discount;
 
-    private Date startSaleDate;
+    @Column(name = "start_date")
+    private LocalDate start_date;
 
-    private int hoursToExpire;
+    @Column(name = "expiration_time")
+    private int expiration_time;
 }

@@ -15,9 +15,9 @@ import ru.shop.service.ProductService;
 @RequestMapping("/product")
 public class ProductController {
 
-    private ProductService productService;
+    private final ProductService productService;
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<Product> postProduct(@RequestBody Product product){
         return new ResponseEntity<>(productService.postProduct(product), HttpStatus.OK);
     }

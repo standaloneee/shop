@@ -5,9 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Set;
 import java.util.UUID;
@@ -16,7 +20,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "proudct")
+@Table(name = "product")
 public class Product {
 
     @Id
@@ -32,10 +36,17 @@ public class Product {
 
     private String sale_description;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "product_feedbacks",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "feedback_id")
+    )
     private Set<Feedback> feedback;
 
     private String tags;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "parameter_id")
     private ParametersEntity properties;
 
     private byte grade;
