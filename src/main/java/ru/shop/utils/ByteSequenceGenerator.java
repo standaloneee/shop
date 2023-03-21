@@ -12,7 +12,7 @@ public class ByteSequenceGenerator {
         return sb.toString().getBytes();
     }
 
-    public static byte[] StringToByteArray(String ... strings) {
+    public static byte[] StringsToByteArray(String ... strings) {
         StringBuilder sb = new StringBuilder();
         for (var item : strings) {
             sb.append(item);

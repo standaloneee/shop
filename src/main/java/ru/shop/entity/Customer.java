@@ -58,8 +58,8 @@ public class Customer {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
             return false;
         }
-        Customer user = (Customer) o;
-        return getId() != null && Objects.equals(getId(), user.getId());
+        Customer customer = (Customer) o;
+        return getId() != null && Objects.equals(getId(), customer.getId());
     }
 
     @Override

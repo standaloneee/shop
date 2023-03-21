@@ -3,7 +3,10 @@ package ru.shop.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.shop.entity.Customer;
+import ru.shop.entity.Feedback;
 import ru.shop.entity.Product;
 import ru.shop.entity.Tag;
 import ru.shop.exception.ProductAlreadyExistsException;
@@ -19,6 +22,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final TagService tagService;
+    private final FeedbackService feedbackService;
 
     private final CustomerService customerService;
 
@@ -39,7 +43,6 @@ public class ProductService {
         }
 
         return productRepository.save(product);
-//        return null;
     }
 
     public Product editProduct(UUID productId, Product product) {
@@ -75,5 +78,19 @@ public class ProductService {
 
     public Product findProductById(UUID id) {
         return productRepository.findProductById(id).orElseThrow(() -> new ProductNotFoundException(id.toString()));
+    }
+
+
+    public Product feedbackProduct(UUID productId, UUID customerId, Feedback feedback) {
+
+        Product product = findProductById(productId);
+        Customer customer = customerService.findById(customerId);
+        feedback.setUser(customer);
+        feedback = feedbackService.saveFeedback(feedback, productId.toString());
+
+        product.setFeedback(Set.of(feedback));
+
+
+        return productRepository.save(product);
     }
 }

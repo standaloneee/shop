@@ -27,7 +27,7 @@ public abstract class SaleMapper {
 
     @InheritInverseConfiguration
     @Mapping(target = "password", ignore = true)
-    public abstract CustomerDto userToUserDto(Customer user);
+    public abstract CustomerDto userToUserDto(Customer customer);
 
 
 }

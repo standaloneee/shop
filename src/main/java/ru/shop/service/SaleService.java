@@ -51,7 +51,7 @@ public class SaleService {
                 item.getSale().setStart_date(localDate);
                 item.getSale().setExpiration_time(expiration_time);
                 item.getSale().setId(UUID.nameUUIDFromBytes(
-                        ByteSequenceGenerator.StringToByteArray(
+                        ByteSequenceGenerator.StringsToByteArray(
                                 String.valueOf(discount),
                                 start_date,
                                 String.valueOf(expiration_time)

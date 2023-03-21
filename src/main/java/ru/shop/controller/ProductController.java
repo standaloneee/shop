@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.shop.entity.Feedback;
 import ru.shop.entity.Product;
 import ru.shop.service.ProductService;
 import ru.shop.utils.UUIDValid;
@@ -26,7 +27,7 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/{productId}")
-    @PreAuthorize("@authService.authInfo.hasRole('USER')")
+    @PreAuthorize("@authService.authInfo.authenticated")
     public ResponseEntity<Product> getProduct(@PathVariable @UUIDValid String productId){
         return new ResponseEntity<>(productService.getProduct(UUID.fromString(productId)), HttpStatus.OK);
     }
@@ -47,13 +48,20 @@ public class ProductController {
      *
      *
      * @param productId - id продукта
-     * @param buy - if true - купить и оформить сразу, false - положить в корзину (для будущего функционала)
+     * @param buy - true - купить и оформить сразу, false - положить в корзину (для будущего функционала)
      */
     @PostMapping("/{productId}")
-    @PreAuthorize("@authService.authInfo.hasRole('USER')")
-    public ResponseEntity<Product> buyProduct(@PathVariable @UUIDValid String productId, @RequestParam @UUIDValid String customerId, @RequestParam boolean buy ){
+    @PreAuthorize("@authService.authInfo.authenticated")
+    public ResponseEntity<Product> buyProduct(@PathVariable @UUIDValid String productId,
+                                              @RequestParam @UUIDValid String customerId,
+                                              @RequestParam boolean buy ){
         return new ResponseEntity<>(productService.buyProduct(UUID.fromString(productId), UUID.fromString(customerId), buy), HttpStatus.OK);
     }
-
-
+    @PostMapping("/feedback/{productId}")
+    @PreAuthorize("@authService.authInfo.authenticated")
+    public ResponseEntity<Product> feedbackProduct(@PathVariable @UUIDValid String productId,
+                                                   @RequestParam @UUIDValid String customerId,
+                                                   @RequestBody Feedback feedback){
+        return new ResponseEntity<>(productService.feedbackProduct(UUID.fromString(productId), UUID.fromString(customerId), feedback), HttpStatus.OK);
+    }
 }

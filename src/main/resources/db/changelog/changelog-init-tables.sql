@@ -60,9 +60,7 @@ CREATE TABLE feedback
     id          UUID PRIMARY KEY,
     subject     VARCHAR NOT NULL,
     description VARCHAR NOT NULL,
-    product_id  UUID    NOT NULL,
     user_id     UUID    NOT NULL,
-    FOREIGN KEY (product_id) references product (id),
     FOREIGN KEY (user_id) references customer (id)
 );
 
@@ -98,7 +96,7 @@ CREATE TABLE product_feedbacks
     product_id  UUID NOT NULL,
     feedback_id UUID NOT NULL,
     foreign key (product_id) references product (id),
-    foreign key (feedback_id) references feedback (id)
+    foreign key (feedback_id) references feedback (id) on delete cascade
 );
 
 CREATE TABLE product_users
