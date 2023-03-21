@@ -16,6 +16,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.math.BigInteger;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -58,7 +59,9 @@ public class Product {
     @JoinColumn(name = "parameter_id")
     private ParametersEntity properties;
 
-    private byte grade;
+    private double grade;
+
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name = "product_sales",
             joinColumns = @JoinColumn(name = "product_id"),
@@ -71,6 +74,17 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<Customer> customers;
+
+
+    private double all_grades_value;
+
+    private int number_of_grades;
+
+    public void updateGrade(double grade){
+        number_of_grades++;
+        all_grades_value+=grade;
+        this.grade = all_grades_value / number_of_grades;
+    }
 
     @Override
     public boolean equals(Object o) {

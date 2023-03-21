@@ -36,5 +36,7 @@ public class Feedback {
 
     private String description;
 
+    private double grade;
+
 
 }

@@ -1,5 +1,6 @@
 package ru.shop.controller;
 
+import liquibase.pro.packaged.M;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ import ru.shop.entity.Product;
 import ru.shop.service.ProductService;
 import ru.shop.utils.UUIDValid;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.UUID;
 
 @RestController
@@ -61,7 +64,8 @@ public class ProductController {
     @PreAuthorize("@authService.authInfo.authenticated")
     public ResponseEntity<Product> feedbackProduct(@PathVariable @UUIDValid String productId,
                                                    @RequestParam @UUIDValid String customerId,
+                                                   @RequestParam @Min(0) @Max(5) double grade,
                                                    @RequestBody Feedback feedback){
-        return new ResponseEntity<>(productService.feedbackProduct(UUID.fromString(productId), UUID.fromString(customerId), feedback), HttpStatus.OK);
+        return new ResponseEntity<>(productService.feedbackProduct(UUID.fromString(productId), UUID.fromString(customerId), feedback, grade), HttpStatus.OK);
     }
 }

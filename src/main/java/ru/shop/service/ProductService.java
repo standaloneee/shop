@@ -3,8 +3,6 @@ package ru.shop.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import ru.shop.entity.Customer;
 import ru.shop.entity.Feedback;
 import ru.shop.entity.Product;
@@ -81,12 +79,16 @@ public class ProductService {
     }
 
 
-    public Product feedbackProduct(UUID productId, UUID customerId, Feedback feedback) {
+    public Product feedbackProduct(UUID productId, UUID customerId, Feedback feedback, double grade) {
 
         Product product = findProductById(productId);
         Customer customer = customerService.findById(customerId);
         feedback.setUser(customer);
-        feedback = feedbackService.saveFeedback(feedback, productId.toString());
+        feedback.setGrade(grade);
+        feedback = feedbackService.setUUIDAndSaveFeedback(feedback, productId.toString(), grade);
+        // Важно! Среднюю оценку можно будет поднять путем бесконечной отправки PostMapping
+        product.updateGrade(grade);
+
 
         product.setFeedback(Set.of(feedback));
 

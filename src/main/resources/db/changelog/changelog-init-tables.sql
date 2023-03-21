@@ -13,9 +13,9 @@ create table tag
 create table notification
 (
     id          UUID PRIMARY KEY,
-    subject     varchar NOT NULL,
+    subject     VARCHAR NOT NULL,
     start_date  DATE    NOT NULL,
-    description varchar NOT NULL
+    description VARCHAR NOT NULL
 );
 
 CREATE TABLE parameters
@@ -32,8 +32,10 @@ CREATE TABLE product
     price            DOUBLE PRECISION NOT NULL,
     quantity         INT              NOT NULL,
     sale_description VARCHAR          NOT NULL,
-    grade            INT2,
+    grade            DOUBLE PRECISION,
     parameter_id     UUID,
+    all_grades_value DOUBLE PRECISION,
+    number_of_grades INT,
     FOREIGN KEY (parameter_id) REFERENCES parameters (id)
 
 );
@@ -61,7 +63,8 @@ CREATE TABLE feedback
     subject     VARCHAR NOT NULL,
     description VARCHAR NOT NULL,
     user_id     UUID    NOT NULL,
-    FOREIGN KEY (user_id) references customer (id)
+    grade            DOUBLE PRECISION,
+    FOREIGN KEY (user_id) REFERENCES customer (id)
 );
 
 
@@ -70,7 +73,7 @@ CREATE TABLE sale
     id              UUID PRIMARY KEY,
     discount        INT2             NOT NULL,
     start_date      DATE             NOT NULL,
-    expiration_time int              NOT NULL
+    expiration_time INT              NOT NULL
 );
 
 CREATE TABLE organization
@@ -95,32 +98,32 @@ CREATE TABLE product_feedbacks
 (
     product_id  UUID NOT NULL,
     feedback_id UUID NOT NULL,
-    foreign key (product_id) references product (id),
-    foreign key (feedback_id) references feedback (id) on delete cascade
+    FOREIGN KEY (product_id) REFERENCES product (id),
+    FOREIGN KEY (feedback_id) REFERENCES feedback (id) ON DELETE CASCADE
 );
 
 CREATE TABLE product_users
 (
     user_id    UUID NOT NULL,
     product_id UUID NOT NULL,
-    foreign key (user_id) references customer (id),
-    foreign key (product_id) references product (id)
+    FOREIGN KEY (user_id) REFERENCES customer (id),
+    FOREIGN KEY (product_id) REFERENCES product (id)
 );
 
 CREATE TABLE product_sales
 (
     sale_id    UUID NOT NULL,
     product_id UUID NOT NULL,
-    foreign key (sale_id) references sale (id),
-    foreign key (product_id) references product (id)
+    FOREIGN KEY (sale_id) REFERENCES sale (id),
+    FOREIGN KEY (product_id) REFERENCES product (id)
 );
 
 CREATE TABLE product_tags
 (
     tag_id     UUID NOT NULL,
     product_id UUID NOT NULL,
-    foreign key (tag_id) references tag (id),
-    foreign key (product_id) references product (id)
+    FOREIGN KEY (tag_id) REFERENCES tag (id),
+    FOREIGN KEY (product_id) REFERENCES product (id)
 );
 
 
