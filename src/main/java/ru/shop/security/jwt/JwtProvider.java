@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.shop.entity.Customer;
+import ru.shop.handler.GlobalExceptionHandler;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

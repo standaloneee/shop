@@ -41,7 +41,8 @@ public class SaleController {
     }
 
 
-    // Насколько я понял группа товаров == список товаров для которых надо сделать скидку
+    // Насколько я понял группа товаров == список товаров для которых надо сделать скидку по тэгу
+    // из метода можно вычленить применение скидки по отдельному товару
     @PostMapping("/")
     @PreAuthorize("@authService.authInfo.hasRole('ADMIN')")
     public ResponseEntity<Set<Product>> editProductSalesByTags(@RequestBody Tag[] tags,

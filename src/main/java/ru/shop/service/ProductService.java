@@ -6,11 +6,15 @@ import org.springframework.stereotype.Service;
 import ru.shop.entity.Customer;
 import ru.shop.entity.Feedback;
 import ru.shop.entity.Product;
+import ru.shop.entity.SellHistory;
 import ru.shop.entity.Tag;
+import ru.shop.exception.CustomerNotFoundInProductException;
 import ru.shop.exception.ProductAlreadyExistsException;
 import ru.shop.exception.ProductNotFoundException;
 import ru.shop.repository.ProductRepository;
+import ru.shop.utils.ByteSequenceGenerator;
 
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,6 +27,8 @@ public class ProductService {
     private final FeedbackService feedbackService;
 
     private final CustomerService customerService;
+
+    private final SellHistoryService sellHistoryService;
 
     //    @Transactional(propagation = Propagation.REQUIRED)
     public Product postProduct(Product product) {
@@ -66,6 +72,18 @@ public class ProductService {
         Customer customer = customerService.findById(customerId);
         product.decreaseQuantity();
         product.setCustomers(Set.of(customer));
+        SellHistory sellHistory = new SellHistory();
+        sellHistory.setProduct(product);
+        sellHistory.setCustomer(customer);
+        sellHistory.setPurchase_date(LocalDate.now());
+        sellHistory.setId(UUID.nameUUIDFromBytes(ByteSequenceGenerator.StringsToByteArray(
+                productId.toString(),
+                customerId.toString(),
+                sellHistory.getPurchase_date().toString()
+                        )
+                )
+        );
+        sellHistoryService.saveSellHistory(sellHistory);
         return productRepository.save(product);
         // На данный момент пользователю после покупки может прийти продукт с количеством 0
     }
@@ -82,17 +100,22 @@ public class ProductService {
     public Product feedbackProduct(UUID productId, UUID customerId, Feedback feedback, double grade) {
 
         Product product = findProductById(productId);
+
         Customer customer = customerService.findById(customerId);
-        feedback.setUser(customer);
-        feedback.setGrade(grade);
-        feedback = feedbackService.setUUIDAndSaveFeedback(feedback, productId.toString());
+        if(product.getCustomers().contains(customer)) {
+            feedback.setUser(customer);
+            feedback.setGrade(grade);
+            feedback = feedbackService.setUUIDAndSaveFeedback(feedback, productId.toString());
 
-        // Важно! Среднюю оценку можно будет поднять путем бесконечной отправки PostMapping
-        // Вариант решения - смотреть, был ли создан такой фидбэк к товару по сгенерированному UUID и если был,
-        // то не вызывать описанный ниже метод
+            // Важно! Среднюю оценку можно будет поднять путем бесконечной отправки PostMapping
+            // Вариант решения - смотреть, был ли создан такой фидбэк к товару по сгенерированному UUID и если был,
+            // то не вызывать описанный ниже метод
 
-        product.updateGrade(grade);
-        product.setFeedback(Set.of(feedback));
+            product.updateGrade(grade);
+            product.setFeedback(Set.of(feedback));
+        }else{
+            throw new CustomerNotFoundInProductException();
+        }
         return productRepository.save(product);
     }
 }

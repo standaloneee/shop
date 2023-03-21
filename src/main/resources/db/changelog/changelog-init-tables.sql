@@ -125,6 +125,15 @@ CREATE TABLE product_tags
     FOREIGN KEY (tag_id) REFERENCES tag (id),
     FOREIGN KEY (product_id) REFERENCES product (id)
 );
+CREATE TABLE sell_history
+(
+    id UUID PRIMARY KEY,
+    product_id UUID NOT NULL,
+    customer_id     UUID NOT NULL,
+    purchase_date DATE  NOT NULL,
+    FOREIGN KEY (customer_id) REFERENCES customer (id),
+    FOREIGN KEY (product_id) REFERENCES product (id)
+);
 
 
 
