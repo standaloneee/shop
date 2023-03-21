@@ -22,6 +22,7 @@ import java.util.UUID;
         imports = {UUID.class, Set.class, Role.class}
 )
 public abstract class UserMapper {
+    public static final String user = "USER";
 
 
     protected static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(8);
@@ -32,12 +33,12 @@ public abstract class UserMapper {
     @Mapping(target = "password", expression = "java(encoder.encode(customerDto.getPassword()))")
     @Mapping(target = "email", source = "email")
     @Mapping(target = "id", expression = "java(UUID.randomUUID())")
-    @Mapping(target = "roles", expression = "java(Set.of(roleService.findRoleByName(customerDto.getRole())))")
+    @Mapping(target = "roles", expression = "java(Set.of(roleService.findRoleByName(user)))")
     public abstract Customer register(CustomerDto customerDto, @Context RoleService roleService);
 
     @InheritInverseConfiguration
     @Mapping(target = "password", ignore = true)
-    public abstract CustomerDto userToUserDto(Customer user);
+    public abstract CustomerDto ToCustomerDto(Customer user);
 
 
 }

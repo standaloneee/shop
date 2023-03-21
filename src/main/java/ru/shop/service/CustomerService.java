@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.shop.dto.CustomerDto;
 import ru.shop.entity.Customer;
+import ru.shop.exception.CustomerNotFoundException;
 import ru.shop.mapper.UserMapper;
 import ru.shop.repository.CustomerRepository;
 
@@ -27,14 +28,14 @@ public class CustomerService {
         if(getByLogin(customerDto.getUserName()).isPresent()){
             throw new AuthException("User " + customerDto.getUserName() + " already exists");
         }
-        if(customerDto.getRole().equals("ADMIN")){
-            throw new AuthException("User cannot be set as ADMIN when registering");
-        }
+//        if(customerDto.getRole().equals("ADMIN")){
+//            throw new AuthException("User cannot be set as ADMIN when registering");
+//        }
         Customer customer = UserMapper.INSTANCE.register(customerDto, roleService);
         customerRepository.save(customer);
     }
 
-    public Customer getById(UUID id) {
-        return customerRepository.getById(id);
+    public Customer findById(UUID id) {
+        return customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id.toString()));
     }
 }

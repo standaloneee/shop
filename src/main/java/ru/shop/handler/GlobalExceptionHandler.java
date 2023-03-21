@@ -4,8 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.shop.exception.CustomerNotFoundException;
 import ru.shop.exception.ProductAlreadyExistsException;
 import ru.shop.exception.ProductNotFoundException;
+import ru.shop.exception.ProductOutOfStockException;
+import ru.shop.exception.ProductWithSuchNameNotFoundException;
 import ru.shop.exception.TagNotFoundException;
 
 import javax.security.auth.login.LoginException;
@@ -27,10 +30,14 @@ public class GlobalExceptionHandler {
             value = {
                     ProductNotFoundException.class,
                     TagNotFoundException.class,
-                    ProductAlreadyExistsException.class
+                    ProductAlreadyExistsException.class,
+                    CustomerNotFoundException.class,
+                    TagNotFoundException.class,
+                    ProductWithSuchNameNotFoundException.class,
+                    ProductOutOfStockException.class
             })
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public String handleRoomIsAlreadyDeletedException(RuntimeException e) {
+    public String handleExistingEntities(RuntimeException e) {
         return e.getMessage();
     }
 

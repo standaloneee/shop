@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.shop.entity.Product;
 import ru.shop.service.ProductService;
@@ -40,6 +41,18 @@ public class ProductController {
     @PreAuthorize("@authService.authInfo.hasRole('ADMIN')")
     public ResponseEntity<Product> editProduct(@PathVariable @UUIDValid String productId, @RequestBody Product product){
         return new ResponseEntity<>(productService.editProduct(UUID.fromString(productId), product), HttpStatus.OK);
+    }
+
+    /**
+     *
+     *
+     * @param productId - id продукта
+     * @param buy - if true - купить и оформить сразу, false - положить в корзину (для будущего функционала)
+     */
+    @PostMapping("/{productId}")
+    @PreAuthorize("@authService.authInfo.hasRole('USER')")
+    public ResponseEntity<Product> buyProduct(@PathVariable @UUIDValid String productId, @RequestParam @UUIDValid String customerId, @RequestParam boolean buy ){
+        return new ResponseEntity<>(productService.buyProduct(UUID.fromString(productId), UUID.fromString(customerId), buy), HttpStatus.OK);
     }
 
 

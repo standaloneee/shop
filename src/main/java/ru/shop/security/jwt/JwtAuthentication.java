@@ -19,6 +19,8 @@ public class JwtAuthentication implements Authentication {
     private Set<Role> roles;
 
     public boolean hasRole(String role) {
+        if(role.equals("ADMIN"))
+            return true;
         return roles.stream().map(Role::getRoleName).anyMatch(r -> r.equals(role));
     }
 

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Hibernate;
+import ru.shop.exception.ProductOutOfStockException;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -63,6 +64,13 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "sale_id"))
     private Sale sale;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "product_users",
+    joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<Customer> customers;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -78,6 +86,13 @@ public class Product {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public void decreaseQuantity(){
+        if(quantity == 0){
+            throw new ProductOutOfStockException(name);
+        }
+        quantity -= 1;
     }
 
 }
