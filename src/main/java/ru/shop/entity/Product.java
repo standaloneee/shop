@@ -16,7 +16,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.math.BigInteger;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;

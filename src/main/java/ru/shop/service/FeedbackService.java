@@ -4,7 +4,6 @@ package ru.shop.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.shop.entity.Feedback;
-import ru.shop.entity.Product;
 import ru.shop.repository.FeedbackRepository;
 import ru.shop.utils.ByteSequenceGenerator;
 

@@ -1,6 +1,5 @@
 package ru.shop.controller;
 
-import liquibase.pro.packaged.M;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
