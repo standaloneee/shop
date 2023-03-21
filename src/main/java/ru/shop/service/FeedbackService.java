@@ -17,13 +17,14 @@ public class FeedbackService {
 
 
 
-    public Feedback setUUIDAndSaveFeedback(Feedback feedback, String productId, double grade){
+    public Feedback setUUIDAndSaveFeedback(Feedback feedback, String productId){
         feedback.setId(
                 UUID.nameUUIDFromBytes(
                 ByteSequenceGenerator.StringsToByteArray(feedback.getDescription(),
                         feedback.getSubject(),
+                        feedback.getDescription(),
+                        String.valueOf(feedback.getGrade()),
                         productId,
-                        String.valueOf(grade),
                         feedback.getUser().getUserName()
                         )
                 )

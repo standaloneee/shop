@@ -85,14 +85,14 @@ public class ProductService {
         Customer customer = customerService.findById(customerId);
         feedback.setUser(customer);
         feedback.setGrade(grade);
-        feedback = feedbackService.setUUIDAndSaveFeedback(feedback, productId.toString(), grade);
+        feedback = feedbackService.setUUIDAndSaveFeedback(feedback, productId.toString());
+
         // Важно! Среднюю оценку можно будет поднять путем бесконечной отправки PostMapping
+        // Вариант решения - смотреть, был ли создан такой фидбэк к товару по сгенерированному UUID и если был,
+        // то не вызывать описанный ниже метод
+
         product.updateGrade(grade);
-
-
         product.setFeedback(Set.of(feedback));
-
-
         return productRepository.save(product);
     }
 }
