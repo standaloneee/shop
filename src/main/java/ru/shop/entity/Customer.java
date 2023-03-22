@@ -43,11 +43,20 @@ public class Customer {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_notifications",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "notification_id"))
+    private Set<Notification> notifications;
 
     private double balance;
 
     public void addRole(Role role) {
         roles.add(role);
+    }
+    public void addNotification(Notification notification) {
+        notifications.add(notification);
     }
 
     @Override

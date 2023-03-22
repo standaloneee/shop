@@ -136,6 +136,15 @@ CREATE TABLE sell_history
     FOREIGN KEY (product_id) REFERENCES product (id)
 );
 
+CREATE TABLE user_notifications
+(
+    user_id     UUID NOT NULL,
+    notification_id UUID NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES customer (id),
+    FOREIGN KEY (notification_id) REFERENCES notification (id)
+);
+
+
 
 
 

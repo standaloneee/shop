@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.shop.entity.Customer;
+import ru.shop.entity.Notification;
 import ru.shop.entity.SellHistory;
 import ru.shop.exception.EmptyPageException;
 import ru.shop.service.AuthService;
@@ -105,6 +107,11 @@ public class CustomerController {
     @PreAuthorize("@authService.authInfo.hasRole('ADMIN')")
     public ResponseEntity<Customer> detainCustomer(@PathVariable @UUIDValid String customerId){
         return new ResponseEntity<>(customerService.detainCustomer(UUID.fromString(customerId)), HttpStatus.OK);
+    }
+    @PostMapping("/{customerId}/notification")
+    @PreAuthorize("@authService.authInfo.hasRole('ADMIN')")
+    public ResponseEntity<Customer> sendNotificationToCustomer(@PathVariable @UUIDValid String customerId, @RequestBody Notification notification){
+        return new ResponseEntity<>(customerService.sendNotification(UUID.fromString(customerId), notification), HttpStatus.OK);
     }
 
 

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.shop.dto.CustomerDto;
 import ru.shop.entity.Customer;
+import ru.shop.entity.Notification;
 import ru.shop.entity.SellHistory;
 import ru.shop.exception.AdminRoleChangingException;
 import ru.shop.exception.CustomerNotFoundException;
@@ -28,6 +29,7 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final RoleService roleService;
     private final SellHistoryService sellHistoryService;
+    private final NotificationService notificationService;
 
     public Optional<Customer> getByLogin(@NonNull String login) {
         return customerRepository.findCustomerByUserName(login);
@@ -105,6 +107,14 @@ public class CustomerService {
             throw new AdminRoleChangingException();
         }
         customer.setRoles(Set.of(roleService.findRoleByName("DETAINED")));
+        return customerRepository.save(customer);
+    }
+
+    public Customer sendNotification(UUID customerId, Notification notification) {
+        Customer customer = customerRepository.findCustomerById(customerId).orElseThrow(() -> new CustomerNotFoundException(customerId.toString()));
+        notification.setId(UUID.randomUUID());
+        notificationService.saveNotification(notification);
+        customer.addNotification(notification);
         return customerRepository.save(customer);
     }
 }
