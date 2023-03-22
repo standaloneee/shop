@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.shop.dto.CustomerDto;
 import ru.shop.entity.Customer;
+import ru.shop.entity.Role;
 import ru.shop.entity.SellHistory;
+import ru.shop.exception.AdminRoleChangingException;
 import ru.shop.exception.CustomerNotFoundException;
 import ru.shop.exception.EmptyPageException;
 import ru.shop.mapper.UserMapper;
@@ -95,6 +97,18 @@ public class CustomerService {
         );
         customerRepository.delete(customer);
         return "Successful!";
+    }
+
+    public Customer detainCustomer(UUID customerId) {
+        Customer customer = customerRepository.findCustomerById(customerId).orElseThrow(
+                () -> new CustomerNotFoundException(customerId.toString()
+                )
+        );
+        if(customer.getRoles().stream().anyMatch(item -> item.getRoleName().equals("ADMIN"))){
+            throw new AdminRoleChangingException();
+        }
+        customer.setRoles(Set.of(roleService.findRoleByName("DETAINED")));
+        return customerRepository.save(customer);
     }
 }
 

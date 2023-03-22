@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.shop.exception.AdminRoleChangingException;
 import ru.shop.exception.CustomerNotFoundException;
 import ru.shop.exception.CustomerNotFoundInProductException;
 import ru.shop.exception.EmptyPageException;
@@ -40,7 +41,8 @@ public class GlobalExceptionHandler {
                     ProductWithSuchNameNotFoundException.class,
                     ProductOutOfStockException.class,
                     CustomerNotFoundInProductException.class,
-                    EmptyPageException.class
+                    EmptyPageException.class,
+                    AdminRoleChangingException.class
             })
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public String handleExistingEntities(RuntimeException e) {
