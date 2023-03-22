@@ -10,10 +10,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.shop.entity.Customer;
-import ru.shop.entity.Product;
 import ru.shop.entity.SellHistory;
 import ru.shop.exception.EmptyPageException;
 import ru.shop.service.AuthService;
@@ -30,8 +28,6 @@ import java.util.UUID;
 public class CustomerController {
 
     private final CustomerService customerService;
-
-    private final ProductService productService;
 
     @GetMapping("/history")
     @PreAuthorize("@authService.authInfo.authenticated")

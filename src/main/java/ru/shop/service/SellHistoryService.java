@@ -5,13 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.shop.entity.SellHistory;
-import ru.shop.exception.CustomerNotFoundException;
 import ru.shop.exception.ProductNotFoundException;
 import ru.shop.repository.SellHistoryRepository;
 
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
