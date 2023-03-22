@@ -20,7 +20,6 @@ import ru.shop.entity.SellHistory;
 import ru.shop.exception.EmptyPageException;
 import ru.shop.service.AuthService;
 import ru.shop.service.CustomerService;
-import ru.shop.service.ProductService;
 import ru.shop.utils.UUIDValid;
 
 import java.util.Set;
