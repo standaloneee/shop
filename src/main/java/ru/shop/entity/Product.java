@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Objects;
 import java.util.Set;
@@ -73,6 +74,14 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<Customer> customers;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinTable(name = "product_users",
+    joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Organization organizations;
+
+
 
 
     private double all_grades_value;

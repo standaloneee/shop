@@ -9,12 +9,15 @@ import org.springframework.stereotype.Service;
 import ru.shop.dto.CustomerDto;
 import ru.shop.entity.Customer;
 import ru.shop.entity.Notification;
+import ru.shop.entity.Organization;
+import ru.shop.entity.RegistryRequest;
 import ru.shop.entity.SellHistory;
 import ru.shop.exception.AdminRoleChangingException;
 import ru.shop.exception.CustomerNotFoundException;
 import ru.shop.exception.EmptyPageException;
 import ru.shop.mapper.UserMapper;
 import ru.shop.repository.CustomerRepository;
+import ru.shop.utils.ByteSequenceGenerator;
 
 import javax.security.auth.message.AuthException;
 import java.util.HashSet;
@@ -30,6 +33,9 @@ public class CustomerService {
     private final RoleService roleService;
     private final SellHistoryService sellHistoryService;
     private final NotificationService notificationService;
+
+    private final OrganizationRegistryRequestService organizationRegistryRequestService;
+
 
     public Optional<Customer> getByLogin(@NonNull String login) {
         return customerRepository.findCustomerByUserName(login);
@@ -120,6 +126,17 @@ public class CustomerService {
 
     public Set<Notification> getNotifications(UUID customerId) {
         return customerRepository.findCustomerById(customerId).orElseThrow(() -> new CustomerNotFoundException(customerId.toString())).getNotifications();
+    }
+
+    public RegistryRequest requestOrganizationRegistry(Customer customer, Organization organization) {
+        organization.setId(UUID.nameUUIDFromBytes(ByteSequenceGenerator.StringsToByteArray(organization.getDescription(), organization.getLogo_url())));
+        RegistryRequest registryRequest = new RegistryRequest();
+        organization.setStatus("Pending");
+        registryRequest.setOrganization(organization);
+        registryRequest.setCustomer(customer);
+        registryRequest.setApplication_status("Pending");
+        registryRequest.setId(UUID.nameUUIDFromBytes(ByteSequenceGenerator.UUIDtoByteArray(organization.getId(), customer.getId())));
+        return organizationRegistryRequestService.saveRegistryRequest(registryRequest);
     }
 }
 

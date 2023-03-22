@@ -36,6 +36,9 @@ public class Organization {
     )
     private Set<Product> products;
 
+    private String application_status;
+    private String status;
+
 
     @Override
     public boolean equals(Object o) {

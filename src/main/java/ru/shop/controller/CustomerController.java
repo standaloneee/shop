@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.shop.entity.Customer;
 import ru.shop.entity.Notification;
+import ru.shop.entity.Organization;
+import ru.shop.entity.RegistryRequest;
 import ru.shop.entity.SellHistory;
 import ru.shop.exception.EmptyPageException;
 import ru.shop.service.AuthService;
@@ -118,6 +120,12 @@ public class CustomerController {
     public ResponseEntity<Set<Notification>> getNotifications(@Context AuthService authService){
         Customer customer = customerService.findByName(authService.getAuthInfo().getUsername());
         return new ResponseEntity<>(customerService.getNotifications(customer.getId()), HttpStatus.OK);
+    }
+    @PostMapping("/addOrganization")
+    @PreAuthorize("@authService.authInfo.authenticated")
+    public ResponseEntity<RegistryRequest> requestOrganizationRegistry(@Context AuthService authService, @RequestBody Organization organization){
+        Customer customer = customerService.findByName(authService.getAuthInfo().getUsername());
+        return new ResponseEntity<>(customerService.requestOrganizationRegistry(customer, organization), HttpStatus.OK);
     }
 
 

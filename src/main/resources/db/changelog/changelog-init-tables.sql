@@ -80,7 +80,9 @@ CREATE TABLE organization
 (
     id          UUID PRIMARY KEY,
     description VARCHAR NOT NULL,
-    logo_url    VARCHAR
+    logo_url    VARCHAR,
+    application_status    VARCHAR,
+    status    VARCHAR NOT NULL
 );
 
 
@@ -142,6 +144,24 @@ CREATE TABLE user_notifications
     notification_id UUID NOT NULL,
     FOREIGN KEY (user_id) REFERENCES customer (id),
     FOREIGN KEY (notification_id) REFERENCES notification (id)
+);
+
+CREATE TABLE product_organizations
+(
+    product_id     UUID NOT NULL,
+    organization_id UUID NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES product (id),
+    FOREIGN KEY (organization_id) REFERENCES organization (id)
+);
+
+CREATE TABLE organization_registry_request
+(
+    id UUID primary key,
+    user_id     UUID NOT NULL,
+    organization_id UUID NOT NULL,
+    application_status VARCHAR NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES customer (id),
+    FOREIGN KEY (organization_id) REFERENCES organization (id)
 );
 
 
