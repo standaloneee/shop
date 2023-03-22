@@ -117,6 +117,10 @@ public class CustomerService {
         customer.addNotification(notification);
         return customerRepository.save(customer);
     }
+
+    public Set<Notification> getNotifications(UUID customerId) {
+        return customerRepository.findCustomerById(customerId).orElseThrow(() -> new CustomerNotFoundException(customerId.toString())).getNotifications();
+    }
 }
 
 

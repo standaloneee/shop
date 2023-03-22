@@ -113,6 +113,12 @@ public class CustomerController {
     public ResponseEntity<Customer> sendNotificationToCustomer(@PathVariable @UUIDValid String customerId, @RequestBody Notification notification){
         return new ResponseEntity<>(customerService.sendNotification(UUID.fromString(customerId), notification), HttpStatus.OK);
     }
+    @GetMapping("/notification")
+    @PreAuthorize("@authService.authInfo.authenticated")
+    public ResponseEntity<Set<Notification>> getNotifications(@Context AuthService authService){
+        Customer customer = customerService.findByName(authService.getAuthInfo().getUsername());
+        return new ResponseEntity<>(customerService.getNotifications(customer.getId()), HttpStatus.OK);
+    }
 
 
 
