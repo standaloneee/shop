@@ -131,6 +131,7 @@ CREATE TABLE sell_history
     product_id UUID NOT NULL,
     customer_id     UUID NOT NULL,
     purchase_date DATE  NOT NULL,
+    status VARCHAR NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES customer (id),
     FOREIGN KEY (product_id) REFERENCES product (id)
 );

@@ -11,6 +11,7 @@ import ru.shop.entity.Tag;
 import ru.shop.exception.CustomerNotFoundInProductException;
 import ru.shop.exception.ProductAlreadyExistsException;
 import ru.shop.exception.ProductNotFoundException;
+import ru.shop.exception.RefundPeriodExpiredException;
 import ru.shop.repository.ProductRepository;
 import ru.shop.utils.ByteSequenceGenerator;
 
@@ -65,6 +66,9 @@ public class ProductService {
     public void saveProducts(Set<Product> products) {
         productRepository.saveAll(products);
     }
+    public Product saveProduct(Product product) {
+       return productRepository.save(product);
+    }
 
     //TODO: сделать корзину и мгновенную покупку
     public Product buyProduct(UUID productId, UUID customerId, boolean buy) {
@@ -76,6 +80,7 @@ public class ProductService {
         sellHistory.setProduct(product);
         sellHistory.setCustomer(customer);
         sellHistory.setPurchase_date(LocalDate.now());
+        sellHistory.setStatus("Bought");
         sellHistory.setId(UUID.nameUUIDFromBytes(ByteSequenceGenerator.StringsToByteArray(
                 productId.toString(),
                 customerId.toString(),
@@ -117,5 +122,16 @@ public class ProductService {
             throw new CustomerNotFoundInProductException();
         }
         return productRepository.save(product);
+    }
+
+    public Product refundProduct(UUID productId, UUID customerId) {
+        customerService.findById(customerId); // just to throw exception
+        SellHistory sellHistory = sellHistoryService.findSellHistoryByProductId(productId, customerId);
+        if(!sellHistory.getPurchase_date().isAfter(LocalDate.now().plusDays(1))){
+            throw new RefundPeriodExpiredException();
+        }
+        sellHistory.setStatus("Refunded");
+        sellHistoryService.saveSellHistory(sellHistory);
+        return sellHistory.getProduct();
     }
 }

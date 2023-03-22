@@ -8,11 +8,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.shop.dto.CustomerDto;
 import ru.shop.entity.Customer;
+import ru.shop.entity.Product;
 import ru.shop.entity.SellHistory;
 import ru.shop.exception.CustomerNotFoundException;
 import ru.shop.exception.EmptyPageException;
 import ru.shop.mapper.UserMapper;
 import ru.shop.repository.CustomerRepository;
+import ru.shop.repository.ProductRepository;
 
 import javax.security.auth.message.AuthException;
 import java.util.Optional;
@@ -63,4 +65,6 @@ public class CustomerService {
             return sellHistoryService.getPageHistoryByUserId(id, pageable);
         }
     }
+
+
 }

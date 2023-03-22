@@ -1,6 +1,7 @@
 package ru.shop.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.Context;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.shop.entity.Customer;
 import ru.shop.entity.Feedback;
 import ru.shop.entity.Product;
+import ru.shop.service.AuthService;
+import ru.shop.service.CustomerService;
 import ru.shop.service.ProductService;
 import ru.shop.utils.UUIDValid;
 
@@ -27,6 +31,7 @@ import java.util.UUID;
 public class ProductController {
 
     private final ProductService productService;
+    private final CustomerService customerService;
 
     @GetMapping("/{productId}")
     @PreAuthorize("@authService.authInfo.authenticated")
@@ -66,5 +71,13 @@ public class ProductController {
                                                    @RequestParam @Min(0) @Max(5) double grade,
                                                    @RequestBody Feedback feedback){
         return new ResponseEntity<>(productService.feedbackProduct(UUID.fromString(productId), UUID.fromString(customerId), feedback, grade), HttpStatus.OK);
+    }
+
+    @PostMapping("/refund/{productId}")
+    @PreAuthorize("@authService.authInfo.authenticated")
+    public ResponseEntity<Product> refundProduct(@Context AuthService authService, @PathVariable @UUIDValid String productId){
+        Customer customer = customerService.findByName(authService.getAuthInfo().getUsername());
+        return new ResponseEntity<>(productService.refundProduct(UUID.fromString(productId), customer.getId()), HttpStatus.OK);
+
     }
 }

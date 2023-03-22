@@ -63,4 +63,22 @@ public class SaleService {
         productService.saveProducts(products);
         return products;
     }
+
+    public Product editProductSale(UUID productId, short discount, String start_date, int expiration_time) {
+        Sale sale = new Sale();
+        LocalDate localDate = LocalDate.parse(start_date);
+        sale.setDiscount(discount);
+        sale.setStart_date(localDate);
+        sale.setExpiration_time(expiration_time);
+        sale.setId(UUID.nameUUIDFromBytes(
+                ByteSequenceGenerator.StringsToByteArray(
+                        String.valueOf(discount),
+                        start_date,
+                        String.valueOf(expiration_time)
+                )
+        ));
+        Product product = productService.findProductById(productId);
+        product.setSale(sale);
+        return productService.saveProduct(product);
+    }
 }

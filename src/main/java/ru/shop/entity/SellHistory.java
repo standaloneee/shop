@@ -34,4 +34,6 @@ public class SellHistory {
     // Тут только дата, без времени, поменять в целом легко, но логика и так понятна
 
     private LocalDate purchase_date;
+
+    private String status;
 }

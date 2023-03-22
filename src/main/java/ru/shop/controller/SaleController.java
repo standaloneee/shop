@@ -43,6 +43,7 @@ public class SaleController {
 
     // Насколько я понял группа товаров == список товаров для которых надо сделать скидку по тэгу
     // из метода можно вычленить применение скидки по отдельному товару
+
     @PostMapping("/")
     @PreAuthorize("@authService.authInfo.hasRole('ADMIN')")
     public ResponseEntity<Set<Product>> editProductSalesByTags(@RequestBody Tag[] tags,
@@ -51,6 +52,15 @@ public class SaleController {
                                                                @RequestParam int expiration_time
                                                                ) {
         return new ResponseEntity<>(saleService.editProductSalesByTags(tags, discount, start_date, expiration_time), HttpStatus.OK);
+    }
+    @PostMapping("/{productId}")
+    @PreAuthorize("@authService.authInfo.hasRole('ADMIN')")
+    public ResponseEntity<Product> applyProductSale(@RequestBody @PathVariable String productId,
+                                                               @RequestParam short discount,
+                                                               @RequestParam String start_date,
+                                                               @RequestParam int expiration_time
+                                                               ) {
+        return new ResponseEntity<>(saleService.editProductSale(UUID.fromString(productId), discount, start_date, expiration_time), HttpStatus.OK);
     }
 
 
