@@ -7,9 +7,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.shop.entity.Customer;
 import ru.shop.entity.SellHistory;
@@ -70,6 +73,33 @@ public class CustomerController {
         }
         Customer customer = customerService.findById(UUID.fromString(customerId));
         return new ResponseEntity<>(customerService.getCustomerBuyHistoryPage(customer.getId(), page, size), HttpStatus.OK);
+    }
+
+    @PutMapping("/{customerId}")
+    @PreAuthorize("@authService.authInfo.hasRole('ADMIN')")
+    public ResponseEntity<Customer> editBalance(@PathVariable @UUIDValid String customerId, @RequestParam double balance){
+        return new ResponseEntity<>(customerService.editBalance(UUID.fromString(customerId), balance), HttpStatus.OK);
+    }
+    @PutMapping("/{customerId}/addBalance")
+    @PreAuthorize("@authService.authInfo.hasRole('ADMIN')")
+    public ResponseEntity<Customer> addBalance(@PathVariable @UUIDValid String customerId, @RequestParam double amount){
+        return new ResponseEntity<>(customerService.addBalance(UUID.fromString(customerId), amount), HttpStatus.OK);
+    }
+    @PutMapping("/all")
+    @PreAuthorize("@authService.authInfo.hasRole('ADMIN')")
+    public ResponseEntity<Set<Customer>> findAllCustomers(){
+        return new ResponseEntity<>(customerService.findAllCustomers(), HttpStatus.OK);
+    }
+
+    @PutMapping("/{customerId}/get")
+    @PreAuthorize("@authService.authInfo.hasRole('ADMIN')")
+    public ResponseEntity<Customer> findCustomer(@PathVariable @UUIDValid String customerId){
+        return new ResponseEntity<>(customerService.findCustomer(UUID.fromString(customerId)), HttpStatus.OK);
+    }
+    @DeleteMapping("/{customerId}")
+    @PreAuthorize("@authService.authInfo.hasRole('ADMIN')")
+    public ResponseEntity<String> deleteCustomer(@PathVariable @UUIDValid String customerId){
+        return new ResponseEntity<>(customerService.deleteCustomer(UUID.fromString(customerId)), HttpStatus.OK);
     }
 
 

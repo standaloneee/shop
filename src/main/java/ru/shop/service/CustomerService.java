@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.shop.dto.CustomerDto;
 import ru.shop.entity.Customer;
@@ -15,9 +16,11 @@ import ru.shop.mapper.UserMapper;
 import ru.shop.repository.CustomerRepository;
 
 import javax.security.auth.message.AuthException;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +35,7 @@ public class CustomerService {
     }
 
     public void register(CustomerDto customerDto) throws AuthException {
-        if(getByLogin(customerDto.getUserName()).isPresent()){
+        if (getByLogin(customerDto.getUserName()).isPresent()) {
             throw new AuthException("User " + customerDto.getUserName() + " already exists");
         }
 //        if(customerDto.getRole().equals("ADMIN")){
@@ -45,24 +48,54 @@ public class CustomerService {
     public Customer findById(UUID id) {
         return customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id.toString()));
     }
+
     public Customer findByName(String name) {
         return customerRepository.findCustomerByUserName(name).orElseThrow(() -> new CustomerNotFoundException(name));
     }
 
     public Set<SellHistory> getAllCustomerBuyHistory(UUID id) {
 
-            return sellHistoryService.getAllHistoryByUserId(id);
+        return sellHistoryService.getAllHistoryByUserId(id);
 
     }
+
     public Page<SellHistory> getCustomerBuyHistoryPage(UUID id, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        if(sellHistoryService.getPageHistoryByUserId(id,pageable).isEmpty()){
+        if (sellHistoryService.getPageHistoryByUserId(id, pageable).isEmpty()) {
             throw new EmptyPageException();
-        }
-        else {
+        } else {
             return sellHistoryService.getPageHistoryByUserId(id, pageable);
         }
     }
 
+    public Customer editBalance(UUID customerId, double balance) {
+        Customer customer = customerRepository.findCustomerById(customerId).orElseThrow(() -> new CustomerNotFoundException(customerId.toString()));
+        customer.setBalance(balance);
+        return customerRepository.save(customer);
+    }
 
+    public Customer addBalance(UUID customerId, double amount) {
+        Customer customer = customerRepository.findCustomerById(customerId).orElseThrow(() -> new CustomerNotFoundException(customerId.toString()));
+        customer.setBalance(customer.getBalance() + amount);
+        return customerRepository.save(customer);
+    }
+
+    public Set<Customer> findAllCustomers() {
+        return new HashSet<>(customerRepository.findAll()); // не очень хороший вариант решения, из List -> Set, но пока так
+    }
+
+    public Customer findCustomer(UUID customerId) {
+        return customerRepository.findCustomerById(customerId).orElseThrow(() -> new CustomerNotFoundException(customerId.toString()));
+    }
+
+
+    public String deleteCustomer(UUID customerId) {
+        Customer customer = customerRepository.findCustomerById(customerId).orElseThrow(
+                () -> new CustomerNotFoundException(customerId.toString())
+        );
+        customerRepository.delete(customer);
+        return "Successful!";
+    }
 }
+
+
