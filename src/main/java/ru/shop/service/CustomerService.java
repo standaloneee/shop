@@ -129,9 +129,10 @@ public class CustomerService {
     }
 
     public RegistryRequest requestOrganizationRegistry(Customer customer, Organization organization) {
-        organization.setId(UUID.nameUUIDFromBytes(ByteSequenceGenerator.StringsToByteArray(organization.getDescription(), organization.getLogo_url())));
-        RegistryRequest registryRequest = new RegistryRequest();
+        organization.setId(UUID.nameUUIDFromBytes(ByteSequenceGenerator.StringsToByteArray(organization.getDescription(), organization.getLogo_url(), organization.getOwner().getId().toString())));
         organization.setStatus("Pending");
+        organization.setOwner(customer);
+        RegistryRequest registryRequest = new RegistryRequest();
         registryRequest.setOrganization(organization);
         registryRequest.setCustomer(customer);
         registryRequest.setApplication_status("Pending");

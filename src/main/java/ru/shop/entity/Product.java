@@ -41,6 +41,8 @@ public class Product {
 
     private String sale_description;
 
+    private double grade;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "product_feedbacks",
             joinColumns = @JoinColumn(name = "product_id"),
@@ -59,8 +61,6 @@ public class Product {
     @JoinColumn(name = "parameter_id")
     private ParametersEntity properties;
 
-    private double grade;
-
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name = "product_sales",
@@ -70,27 +70,26 @@ public class Product {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "product_users",
-    joinColumns = @JoinColumn(name = "product_id"),
+            joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<Customer> customers;
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinTable(name = "product_users",
-    joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+    @JoinTable(name = "product_organizations",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "organization_id")
     )
-    private Organization organizations;
-
-
-
+    private Organization organization;
 
     private double all_grades_value;
 
     private int number_of_grades;
 
-    public void updateGrade(double grade){
+    private String status;
+
+    public void updateGrade(double grade) {
         number_of_grades++;
-        all_grades_value+=grade;
+        all_grades_value += grade;
         this.grade = all_grades_value / number_of_grades;
     }
 
@@ -111,8 +110,8 @@ public class Product {
         return getClass().hashCode();
     }
 
-    public void decreaseQuantity(){
-        if(quantity == 0){
+    public void decreaseQuantity() {
+        if (quantity == 0) {
             throw new ProductOutOfStockException(name);
         }
         quantity -= 1;

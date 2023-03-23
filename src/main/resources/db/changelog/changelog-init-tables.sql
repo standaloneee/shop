@@ -36,6 +36,7 @@ CREATE TABLE product
     parameter_id     UUID,
     all_grades_value DOUBLE PRECISION,
     number_of_grades INT,
+    status VARCHAR NOT NULL,
     FOREIGN KEY (parameter_id) REFERENCES parameters (id)
 
 );
@@ -82,7 +83,9 @@ CREATE TABLE organization
     description VARCHAR NOT NULL,
     logo_url    VARCHAR,
     application_status    VARCHAR,
-    status    VARCHAR NOT NULL
+    status    VARCHAR NOT NULL,
+    owner_id UUID NOT NULL,
+    FOREIGN KEY (owner_id) REFERENCES customer(id)
 );
 
 
@@ -162,6 +165,18 @@ CREATE TABLE organization_registry_request
     application_status VARCHAR NOT NULL,
     FOREIGN KEY (user_id) REFERENCES customer (id),
     FOREIGN KEY (organization_id) REFERENCES organization (id)
+);
+CREATE TABLE product_registry_request
+(
+    id UUID primary key,
+    user_id     UUID NOT NULL,
+    organization_id UUID NOT NULL,
+    product_id UUID NOT NULL,
+    application_status VARCHAR NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES customer (id),
+    FOREIGN KEY (organization_id) REFERENCES organization (id),
+    FOREIGN KEY (product_id) REFERENCES product (id)
+
 );
 
 

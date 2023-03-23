@@ -59,6 +59,9 @@ public class Customer {
         notifications.add(notification);
     }
 
+    public void addBalance(double amount){
+        balance+=amount;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) {

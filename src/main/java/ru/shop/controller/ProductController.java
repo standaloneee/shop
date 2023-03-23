@@ -23,6 +23,7 @@ import ru.shop.utils.UUIDValid;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -78,6 +79,13 @@ public class ProductController {
     public ResponseEntity<Product> refundProduct(@Context AuthService authService, @PathVariable @UUIDValid String productId){
         Customer customer = customerService.findByName(authService.getAuthInfo().getUsername());
         return new ResponseEntity<>(productService.refundProduct(UUID.fromString(productId), customer.getId()), HttpStatus.OK);
+
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("@authService.authInfo.authenticated")
+    public ResponseEntity<Set<Product>> getAllProducts(){
+        return new ResponseEntity<>(productService.getAllProducts(), HttpStatus.OK);
 
     }
 }

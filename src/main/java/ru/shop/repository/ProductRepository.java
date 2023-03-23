@@ -15,4 +15,6 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     Set<Product> findProductsByTag(Tag tag);
 
     Optional<Product> findProductByName(String name);
+
+    Set<Product> findAllByOrganization_Status(String status);
 }

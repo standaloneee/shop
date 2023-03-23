@@ -46,6 +46,7 @@ public class ProductService {
         } else {
             product.setTag(tagService.addTags(product.getTag()));
         }
+        product.setStatus("APPROVED");
 
         return productRepository.save(product);
     }
@@ -70,12 +71,14 @@ public class ProductService {
        return productRepository.save(product);
     }
 
-    //TODO: сделать корзину и мгновенную покупку
+    //TODO: сделать корзину и мгновенную покупку (не то тз)
     public Product buyProduct(UUID productId, UUID customerId, boolean buy) {
         Product product = findProductById(productId);
         Customer customer = customerService.findById(customerId);
         product.decreaseQuantity();
         product.setCustomers(Set.of(customer));
+        // на данном моменте полагаем что у товара всегда есть организация, иначе будет NullPointerException
+        product.getOrganization().getOwner().addBalance(product.getPrice()%5); //hard code %, можно сделать static const percent
         SellHistory sellHistory = new SellHistory();
         sellHistory.setProduct(product);
         sellHistory.setCustomer(customer);
@@ -88,6 +91,7 @@ public class ProductService {
                         )
                 )
         );
+
         sellHistoryService.saveSellHistory(sellHistory);
         return productRepository.save(product);
         // На данный момент пользователю после покупки может прийти продукт с количеством 0
@@ -133,5 +137,9 @@ public class ProductService {
         sellHistory.setStatus("Refunded");
         sellHistoryService.saveSellHistory(sellHistory);
         return sellHistory.getProduct();
+    }
+
+    public Set<Product> getAllProducts() {
+        return productRepository.findAllByOrganization_Status("APPROVED");
     }
 }
