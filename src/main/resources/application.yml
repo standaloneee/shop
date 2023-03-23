@@ -33,3 +33,9 @@ logging:
     ru: debug
 
 
+jwt:
+  secret:
+    access: Zsj2As
+    refresh: J81beP
+
+
